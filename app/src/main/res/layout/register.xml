@@ -7,10 +7,15 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="375dp"
+        android:layout_width="200dp"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/logoo" />
+        android:id="@+id/logoo"
+        android:src="@drawable/logoo"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        />
 
     <EditText
         android:id="@+id/etName"

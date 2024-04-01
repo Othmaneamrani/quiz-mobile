@@ -18,8 +18,13 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         android:layout_gravity="center"
-        android:src="@drawable/q3" />
+        android:id="@+id/image3"
+        android:src="@drawable/q3"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        />
 
     <TextView
         android:id="@+id/q3"
@@ -55,10 +60,14 @@
         android:id="@+id/bnext"/>
 
     <ImageView
-        android:layout_width="50dp"
+        android:id="@+id/image32"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/logoo" />
+        android:src="@drawable/logoo"
+        android:layout_marginTop="40dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true" />
 
 
 </LinearLayout>

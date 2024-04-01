@@ -6,12 +6,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Register extends AppCompatActivity {
-
+    ImageView imageView;
     EditText etMail , etPasswordR,etConfirmPasswd;
     Button bRegister;
     TextView tvLogin;
@@ -46,6 +48,12 @@ public class Register extends AppCompatActivity {
         etConfirmPasswd = (EditText) findViewById(R.id.etConfirmPasswd);
         bRegister = (Button) findViewById(R.id.bRegister);
         tvLogin = (TextView) findViewById(R.id.tvLogin);
+        imageView = findViewById(R.id.logoo);
+
+        Glide.with(this)
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz-394bc.appspot.com/o/logoo.jpg?alt=media&token=1a36d40e-79fd-4385-a8d2-840fa79ed12d")
+                .into(imageView);
+
         mAuth = FirebaseAuth.getInstance();
 
         bRegister.setOnClickListener(new View.OnClickListener() {

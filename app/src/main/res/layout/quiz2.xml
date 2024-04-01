@@ -17,9 +17,14 @@
 
     <ImageView
         android:layout_width="wrap_content"
+        android:layout_marginTop="60dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/q2" />
+        android:id="@+id/image2"
+        android:src="@drawable/q2"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        />
 
     <TextView
         android:id="@+id/q2"
@@ -56,10 +61,14 @@
         android:id="@+id/bnext"/>
 
     <ImageView
-        android:layout_width="50dp"
+        android:id="@+id/image22"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/logoo" />
+        android:src="@drawable/logoo"
+        android:layout_marginTop="40dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true" />
 
 
 

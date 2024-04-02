@@ -9,13 +9,13 @@
     android:layout_margin="25dp">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/logoo2"
-        android:src="@drawable/logoo"
-        android:scaleType="fitCenter"
+        android:layout_width="330dp"
+        android:layout_height="280dp"
+        android:layout_marginLeft="10dp"
         android:adjustViewBounds="true"
-        />
+        android:scaleType="fitCenter"
+        android:src="@drawable/logoo" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,5 +71,12 @@
             android:text="@string/try_again"
             android:id="@+id/bTry"/>
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>

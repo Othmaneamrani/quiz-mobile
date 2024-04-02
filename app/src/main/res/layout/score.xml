@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="115dp"
+            android:layout_marginEnd="107dp"
             app:indicatorSize="130dp"
             app:trackCornerRadius="30dp"
             app:trackThickness="10dp"
@@ -47,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_centerHorizontal="true"
             android:textSize="30sp"
             android:textStyle="bold"
             tools:text="50%" />

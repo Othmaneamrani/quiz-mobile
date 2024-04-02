@@ -1,28 +1,11 @@
 <resources>
     <string name="app_name">Quiz App</string>
     <string name="title_activity_register">Register</string>
-    <string name="quiz_1">Quiz 1</string>
-    <string name="q1">A cette intersection, je laisse la priorité à droite:</string>
     <string name="to_register">to register click here</string>
     <string name="sign_in">sign in</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="next">NEXT</string>
-    <string name="quiz_2">Quiz 2</string>
-    <string name="q2">Le panneau de danger indique une succession de virages dont le premier est:</string>
-    <string name="droite">À droite</string>
-    <string name="gauche">À gauche</string>
-    <string name="quiz_3">Quiz 3</string>
-    <string name="q3">Avant de partir, je laisse tourner mon moteur pour qu\'il monte en température:</string>
-    <string name="oui">Oui</string>
-    <string name="non">Non</string>
-    <string name="quiz_4">Quiz 4</string>
-    <string name="q4">En tant qu\'automobiliste, vous devez être plus vigilant lorsque:</string>
-    <string name="tram_arret">Le tramway est arrêté</string>
-    <string name="tram_circule">Le tramway circule</string>
-    <string name="quiz_5">Quiz 5</string>
-    <string name="q5">En conduisant, je paux utiliser mon portable pour écrire un texto ou composer un numéro:</string>
-    <string name="name">name</string>
     <string name="confirm_password">Confirm password</string>
     <string name="register">Register</string>
     <string name="to_login">to login click here</string>
@@ -30,4 +13,5 @@
     <string name="score_50">50%</string>
     <string name="logout">Logout</string>
     <string name="try_again">Try again</string>
+    <string name="name">Name</string>
 </resources>

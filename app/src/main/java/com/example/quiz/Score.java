@@ -35,7 +35,7 @@ public class Score extends AppCompatActivity {
         imageView = findViewById(R.id.logoo2);
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz-394bc.appspot.com/o/logoo.jpg?alt=media&token=1a36d40e-79fd-4385-a8d2-840fa79ed12d")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
                 .into(imageView);
 
         Intent intent=getIntent();
@@ -56,7 +56,7 @@ public class Score extends AppCompatActivity {
         bTry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Score.this,Quiz1.class));
+                startActivity(new Intent(Score.this,Quiz.class));
             }
         });
 

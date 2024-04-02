@@ -33,7 +33,7 @@ public class Register extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(Register.this, Quiz1.class));
+            startActivity(new Intent(Register.this, Quiz.class));
             finish();
         }
     }
@@ -51,7 +51,7 @@ public class Register extends AppCompatActivity {
         imageView = findViewById(R.id.logoo);
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz-394bc.appspot.com/o/logoo.jpg?alt=media&token=1a36d40e-79fd-4385-a8d2-840fa79ed12d")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
                 .into(imageView);
 
         mAuth = FirebaseAuth.getInstance();
@@ -84,7 +84,7 @@ public class Register extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Register.this, "Registration succeeded .",
                                             Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(Register.this, Quiz1.class));
+                                    startActivity(new Intent(Register.this, Quiz.class));
                                     finish();
                                 } else {
                                     Toast.makeText(Register.this, "Registration failed.",

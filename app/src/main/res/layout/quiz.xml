@@ -12,26 +12,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/quiz_3"
         android:textSize="40dp" />
 
     <ImageView
+        android:id="@+id/image1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:layout_gravity="center"
-        android:id="@+id/image3"
-        android:src="@drawable/q3"
+        android:layout_marginTop="60dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         />
 
     <TextView
-        android:id="@+id/q3"
+        android:id="@+id/q"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/q3"
         android:textSize="20dp" />
 
     <RadioGroup
@@ -43,24 +40,25 @@
             android:id="@+id/choice1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/oui" />
+            />
 
         <RadioButton
             android:id="@+id/choice2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/non" />
+            />
     </RadioGroup>
 
     <Button
-        android:layout_width="wrap_content"
+        android:id="@+id/bnext"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/next"
-        android:id="@+id/bnext"/>
+        />
 
     <ImageView
-        android:id="@+id/image32"
+        android:id="@+id/image12"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -33,7 +33,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(Login.this, Quiz1.class));
+            startActivity(new Intent(Login.this, Quiz.class));
             finish();
         }
     }
@@ -54,7 +54,7 @@ public class Login extends AppCompatActivity {
 
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz-394bc.appspot.com/o/logo.png?alt=media&token=182074d4-1564-426a-af76-eaa9ede3ec39")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logo.png?alt=media&token=ecee97f3-e212-44c9-937e-a4b308858748")
                         .into(imageView);
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Login.this, "Authentication succeeded .",
                                             Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(Login.this, Quiz1.class));
+                                    startActivity(new Intent(Login.this, Quiz.class));
                                     finish();
                                 } else {
                                     Toast.makeText(Login.this, "Authentication failed.",

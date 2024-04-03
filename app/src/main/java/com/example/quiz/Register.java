@@ -19,13 +19,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
     ImageView imageView;
     EditText etMail , etPasswordR,etConfirmPasswd;
     Button bRegister;
     TextView tvLogin;
-
+    TextView name;
     FirebaseAuth mAuth;
 
     @Override
@@ -49,6 +53,7 @@ public class Register extends AppCompatActivity {
         bRegister = (Button) findViewById(R.id.bRegister);
         tvLogin = (TextView) findViewById(R.id.tvLogin);
         imageView = findViewById(R.id.logoo);
+        name =findViewById(R.id.etName);
 
         Glide.with(this)
                 .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
@@ -84,6 +89,18 @@ public class Register extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Register.this, "Registration succeeded .",
                                             Toast.LENGTH_SHORT).show();
+                                    String userId = mAuth.getCurrentUser().getUid();
+
+                                    String userName = String.valueOf(name.getText()) ;
+
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    DocumentReference userRef = db.collection("User").document(userId);
+                                    userRef.set(new HashMap<String, Object>() {{
+                                        put("ID", userId);
+                                        put("nom", userName);
+                                        put("email",email);
+                                        }});
+
                                     startActivity(new Intent(Register.this, Quiz.class));
                                     finish();
                                 } else {

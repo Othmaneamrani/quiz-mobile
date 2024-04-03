@@ -27,7 +27,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
 
 public class Score extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap gMap;
@@ -38,8 +49,9 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
     Button bLogout, bTry;
     ProgressBar progressBar;
     TextView tvScore;
-
+    FirebaseAuth mAuth;
     int score;
+    String userAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
         bLogout = findViewById(R.id.bLogout);
         bTry = findViewById(R.id.bTry);
         imageView = findViewById(R.id.logoo2);
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -95,24 +108,84 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
         public void onLocationChanged(Location location) {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
-
             LatLng currentLocation = new LatLng(latitude, longitude);
 
-            if (gMap != null) {
-                if (currentLocationMarker != null) {
-                    currentLocationMarker.remove();
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            String userEmail = currentUser.getEmail();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference usersRef = db.collection("User");
+
+            usersRef.whereEqualTo("email", userEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            userAuth = String.valueOf(document.get("nom"));
+                            if (gMap != null) {
+                                if (currentLocationMarker != null) {
+                                    currentLocationMarker.remove();
+                                }
+
+                                LatLng currentLocation = new LatLng(latitude, longitude);
+                                GeoPoint geoPoint = new GeoPoint(currentLocation.latitude, currentLocation.longitude);
+                                String userId = mAuth.getCurrentUser().getUid();
+                                DocumentReference userRef = db.collection("User").document(userId);
+                                userRef.update(new HashMap<String, Object>() {{
+                                    put("score", (100 * score) / 5);
+                                    put("gps",geoPoint);;
+                                }});
+
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.position(currentLocation);
+                                markerOptions.title(userAuth);
+                                markerOptions.snippet("Score : " + (100 * score) / 5 + "%");
+                                Marker marker = gMap.addMarker(markerOptions);
+                                marker.showInfoWindow();
+
+                                currentLocationMarker = gMap.addMarker(markerOptions);
+
+                                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+
+                                locationManager.removeUpdates(locationListener);
+
+
+                                usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                String userNom = document.getString("nom");
+                                                double score = document.getDouble("score");
+                                                GeoPoint geoPoint = document.getGeoPoint("gps");
+
+                                                if (geoPoint != null && !userNom.equals(userAuth) ) {
+                                                    double latitude = geoPoint.getLatitude();
+                                                    double longitude = geoPoint.getLongitude();
+                                                    LatLng userLocation = new LatLng(latitude, longitude);
+
+                                                    MarkerOptions markerOptions = new MarkerOptions();
+                                                    markerOptions.position(userLocation);
+                                                    markerOptions.title(userNom);
+                                                    markerOptions.snippet("Score : " + score + "%");
+
+                                                    gMap.addMarker(markerOptions);
+                                                }
+                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Erreur lors de la récupération des utilisateurs", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "User introuvable.", Toast.LENGTH_SHORT).show();
+                    }
                 }
+            });
 
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(currentLocation);
-                markerOptions.title("smia "+(100 * score) / 5+"%");
-
-                currentLocationMarker = gMap.addMarker(markerOptions);
-
-                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
-
-                locationManager.removeUpdates(locationListener);
-            }
         }
 
         @Override

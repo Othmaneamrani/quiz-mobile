@@ -54,7 +54,7 @@ public class Login extends AppCompatActivity {
 
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/dev.png?alt=media&token=9ecbc69e-d057-4693-830e-f2593bf97ea2")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/jen.png?alt=media&token=d3f33d6c-0573-4270-9441-de25c35ebb71")
                         .into(imageView);
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override

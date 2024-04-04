@@ -11,11 +11,11 @@
     <ImageView
         android:id="@+id/logoo2"
         android:layout_width="323dp"
-        android:layout_height="240dp"
+        android:layout_height="201dp"
         android:layout_marginLeft="10dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/logoo" />
+        android:src="@drawable/codeee" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -56,7 +56,7 @@ public class Register extends AppCompatActivity {
         name =findViewById(R.id.etName);
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/jen.png?alt=media&token=d3f33d6c-0573-4270-9441-de25c35ebb71")
                 .into(imageView);
 
         mAuth = FirebaseAuth.getInstance();

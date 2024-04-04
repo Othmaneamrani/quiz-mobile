@@ -7,12 +7,12 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/logoo"
-        android:src="@drawable/logoo"
+        android:src="@drawable/chatterbox"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         />
@@ -21,7 +21,9 @@
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/name" />
+        android:hint="@string/name"
+        android:drawableLeft="@drawable/baseline_name_24"
+        />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -9,12 +9,14 @@ public class Question {
 
     public Question (){}
 
-    public Question(String id, String question, String rep, String rep1, String rep2, String image, int score) {
+    public Question(String id, String question, String rep, String rep1, String rep2,String rep3, String rep4, String image, int score) {
         this.id = id;
         this.question = question;
         this.rep = rep;
         this.rep1 = rep1;
         this.rep2 = rep2;
+        this.rep3 = rep3;
+        this.rep4 = rep4;
         this.image = image;
         this.score = score;
     }
@@ -42,6 +44,22 @@ public class Question {
 
     public void setRep(String rep) {
         this.rep = rep;
+    }
+
+    public String getRep3() {
+        return rep3;
+    }
+
+    public void setRep3(String rep3) {
+        this.rep3 = rep3;
+    }
+
+    public String getRep4() {
+        return rep4;
+    }
+
+    public void setRep4(String rep4) {
+        this.rep4 = rep4;
     }
 
     public String getRep1() {
@@ -77,7 +95,7 @@ public class Question {
     }
 
     private String question;
-    private String rep,rep1,rep2,image;
+    private String rep,rep1,rep2,rep3,rep4,image;
     private int score=0;
 
 }

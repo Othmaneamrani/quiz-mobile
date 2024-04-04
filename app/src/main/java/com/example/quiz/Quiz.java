@@ -46,11 +46,15 @@ import java.util.concurrent.ExecutionException;
 public class Quiz extends AppCompatActivity {
     private TextView questionTextView;
     private TextView questionNum;
-    private ImageView questionImageView, imageView12;
+    private ImageView questionImageView;
     private RadioButton rep1RadioButton;
     private RadioButton rep2RadioButton;
+    private RadioButton rep3RadioButton;
+    private RadioButton rep4RadioButton;
     private RadioGroup choicesRadioGroup;
     private Button nextButton;
+    int cpt=1;
+
     private int currentQuestionIndex = 0;
     private int score = 0;
     private ImageCapture imageCapture;
@@ -89,14 +93,13 @@ public class Quiz extends AppCompatActivity {
         questionNum = findViewById(R.id.nquiz);
         questionTextView = findViewById(R.id.q);
         questionImageView = findViewById(R.id.image1);
-        imageView12 = findViewById(R.id.image12);
         rep1RadioButton = findViewById(R.id.choice1);
         rep2RadioButton = findViewById(R.id.choice2);
+        rep3RadioButton = findViewById(R.id.choice3);
+        rep4RadioButton = findViewById(R.id.choice4);
         choicesRadioGroup = findViewById(R.id.choices);
         nextButton = findViewById(R.id.bnext);
-        Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
-                .into(imageView12);
+
 
         loadQuestions();
 
@@ -139,8 +142,8 @@ public class Quiz extends AppCompatActivity {
     private void displayQuestion() {
         if (currentQuestionIndex < questions.size()) {
             Question currentQuestion = questions.get(currentQuestionIndex);
-
-            questionNum.setText("Question " + currentQuestion.id);
+                questionNum.setText("Question " +cpt);
+                cpt++;
             questionTextView.setText(currentQuestion.getQuestion());
             Glide.with(this)
                     .load(currentQuestion.getImage())
@@ -148,6 +151,8 @@ public class Quiz extends AppCompatActivity {
 
             rep1RadioButton.setText(currentQuestion.getRep1());
             rep2RadioButton.setText(currentQuestion.getRep2());
+            rep3RadioButton.setText(currentQuestion.getRep3());
+            rep4RadioButton.setText(currentQuestion.getRep4());
 
             choicesRadioGroup.clearCheck();
         }

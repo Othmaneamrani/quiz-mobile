@@ -77,13 +77,13 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/logoo.jpg?alt=media&token=e6b26d8d-8432-491e-a1dc-2178e4eb4085")
+                .load("https://firebasestorage.googleapis.com/v0/b/quiz2-4121b.appspot.com/o/iconn.png?alt=media&token=f2afc551-3c94-450b-afe2-b2dc18cd1f44")
                 .into(imageView);
 
         Intent intent = getIntent();
         score = intent.getIntExtra("score", 0);
-        progressBar.setProgress((100 * score) / 5);
-        tvScore.setText((100 * score) / 5 + " %");
+        progressBar.setProgress((10 * score));
+        tvScore.setText((10 * score)+ " %");
 
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,14 +132,14 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
                                 String userId = mAuth.getCurrentUser().getUid();
                                 DocumentReference userRef = db.collection("User").document(userId);
                                 userRef.update(new HashMap<String, Object>() {{
-                                    put("score", (100 * score) / 5);
+                                    put("score", (10 * score));
                                     put("gps",geoPoint);;
                                 }});
 
                                 MarkerOptions markerOptions = new MarkerOptions();
                                 markerOptions.position(currentLocation);
                                 markerOptions.title(userAuth);
-                                markerOptions.snippet("Score : " + (100 * score) / 5 + "%");
+                                markerOptions.snippet("Score : " + (10 * score) + "%");
                                 Marker marker = gMap.addMarker(markerOptions);
                                 marker.showInfoWindow();
 

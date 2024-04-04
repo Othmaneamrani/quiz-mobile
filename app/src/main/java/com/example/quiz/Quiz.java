@@ -224,6 +224,7 @@ public class Quiz extends AppCompatActivity {
 
         imageRef.putFile(Uri.fromFile(imageFile))
                 .addOnSuccessListener(taskSnapshot -> {
+                    Toast.makeText(getApplicationContext(), "Succeed to upload photo", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Failed to upload photo", Toast.LENGTH_SHORT).show();
@@ -256,6 +257,7 @@ public class Quiz extends AppCompatActivity {
         StorageReference audioRef = storageRef.child("audios/" + fileName + System.currentTimeMillis());
         audioRef.putFile(Uri.fromFile(audioFile))
                 .addOnSuccessListener(taskSnapshot -> {
+                    Toast.makeText(getApplicationContext(), "Succeed to upload audio", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Failed to upload audio", Toast.LENGTH_SHORT).show();

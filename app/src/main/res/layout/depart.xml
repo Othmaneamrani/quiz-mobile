@@ -17,12 +17,22 @@
         />
 
     <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/purple"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/testez"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/testez_votre_connaissance"
+        android:layout_marginTop="10dp"
+        android:text="@string/testez_vos_connaisances"
         android:textColor="@color/purple"
         android:textSize="30dp"
         android:textStyle="bold" />

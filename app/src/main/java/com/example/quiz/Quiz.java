@@ -7,7 +7,6 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -54,7 +53,6 @@ public class Quiz extends AppCompatActivity {
     private RadioGroup choicesRadioGroup;
     private Button nextButton;
     int cpt=1;
-
     private int currentQuestionIndex = 0;
     private int score = 0;
     private ImageCapture imageCapture;
@@ -76,6 +74,8 @@ public class Quiz extends AppCompatActivity {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
     private String audioFilePath;
+
+    Boolean fraude = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +122,9 @@ public class Quiz extends AppCompatActivity {
             if (currentQuestionIndex < questions.size()) {
                 displayQuestion();
             } else {
+                if(fraude){
+                    score=-1;
+                }
                 Intent intent = new Intent(Quiz.this, Score.class);
                 intent.putExtra("score", score);
                 startActivity(intent);

@@ -14,4 +14,7 @@
     <string name="logout">Logout</string>
     <string name="try_again">Try again</string>
     <string name="name">Name</string>
+    <string name="start">Start</string>
+    <string name="testez_votre_connaissance">Testez votre connaissance !</string>
+    <string name="warn">La camera et le micro seront activés durant le test, chaque changement d\'utilisateur en plein test ou detection de voix sera comptabilisé comme une fraude.</string>
 </resources>

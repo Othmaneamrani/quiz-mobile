@@ -85,7 +85,7 @@ public class Quiz extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
-            Toast.makeText(getApplicationContext(), "Camera et audio activés !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Record activé !", Toast.LENGTH_SHORT).show();
             initializeCamera();
             startAudioRecording();
         }
@@ -229,7 +229,6 @@ public class Quiz extends AppCompatActivity {
 
         imageRef.putFile(Uri.fromFile(imageFile))
                 .addOnSuccessListener(taskSnapshot -> {
-                    Toast.makeText(getApplicationContext(), "Succeed to upload photo", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Failed to upload photo", Toast.LENGTH_SHORT).show();

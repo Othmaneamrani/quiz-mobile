@@ -33,7 +33,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(Login.this, Quiz.class));
+            startActivity(new Intent(Login.this, Depart.class));
             finish();
         }
     }
@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Login.this, "Authentication succeeded .",
                                             Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(Login.this, Quiz.class));
+                                    startActivity(new Intent(Login.this, Depart.class));
                                     finish();
                                 } else {
                                     Toast.makeText(Login.this, "Authentication failed.",

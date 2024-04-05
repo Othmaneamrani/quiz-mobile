@@ -37,7 +37,7 @@ public class Register extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(Register.this, Quiz.class));
+            startActivity(new Intent(Register.this, Depart.class));
             finish();
         }
     }
@@ -101,7 +101,7 @@ public class Register extends AppCompatActivity {
                                         put("email",email);
                                         }});
 
-                                    startActivity(new Intent(Register.this, Quiz.class));
+                                    startActivity(new Intent(Register.this, Depart.class));
                                     finish();
                                 } else {
                                     Toast.makeText(Register.this, "Registration failed.",

@@ -3,6 +3,7 @@ package com.example.quiz;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +35,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.Face;
+import com.google.mlkit.vision.face.FaceDetection;
+import com.google.mlkit.vision.face.FaceDetector;
+import com.google.mlkit.vision.face.FaceDetectorOptions;
+import com.google.mlkit.vision.face.FaceLandmark;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +67,6 @@ public class Quiz extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference questionsRef = db.collection("Question");
     private List<Question> questions = new ArrayList<>();
-
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private static final int RECORD_AUDIO_PERMISSION_REQUEST_CODE = 2;
     private static final String[] PERMISSIONS = {
@@ -74,8 +81,12 @@ public class Quiz extends AppCompatActivity {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
     private String audioFilePath;
-
-    Boolean fraude = false;
+    File imageDebut;
+    int cptDebut=0;
+    private FaceDetector faceDetector;
+    InputImage inputImageDeb;
+    File imageFile;
+    Boolean envoie = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +101,15 @@ public class Quiz extends AppCompatActivity {
             startAudioRecording();
         }
 
+        FaceDetectorOptions options =
+                new FaceDetectorOptions.Builder()
+                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+                        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+                        .setMinFaceSize(0.15f)
+                        .enableTracking()
+                        .build();
+
         questionNum = findViewById(R.id.nquiz);
         questionTextView = findViewById(R.id.q);
         questionImageView = findViewById(R.id.image1);
@@ -100,6 +120,7 @@ public class Quiz extends AppCompatActivity {
         choicesRadioGroup = findViewById(R.id.choices);
         nextButton = findViewById(R.id.bnext);
 
+        faceDetector = FaceDetection.getClient(options);
 
         loadQuestions();
 
@@ -122,9 +143,6 @@ public class Quiz extends AppCompatActivity {
             if (currentQuestionIndex < questions.size()) {
                 displayQuestion();
             } else {
-                if(fraude){
-                    score=-1;
-                }
                 Intent intent = new Intent(Quiz.this, Score.class);
                 intent.putExtra("score", score);
                 startActivity(intent);
@@ -145,8 +163,8 @@ public class Quiz extends AppCompatActivity {
     private void displayQuestion() {
         if (currentQuestionIndex < questions.size()) {
             Question currentQuestion = questions.get(currentQuestionIndex);
-                questionNum.setText("Question " +cpt);
-                cpt++;
+            questionNum.setText("Question " +cpt);
+            cpt++;
             questionTextView.setText(currentQuestion.getQuestion());
             Glide.with(this)
                     .load(currentQuestion.getImage())
@@ -196,12 +214,13 @@ public class Quiz extends AppCompatActivity {
     }
 
 
+
     private void startCapturing() {
         capturing = true;
         captureTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (capturing) {
+                if (capturing && envoie ) {
                     capturePhoto();
                 }
             }
@@ -211,13 +230,23 @@ public class Quiz extends AppCompatActivity {
     }
 
     private void capturePhoto() {
-        File imageFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo_" + System.currentTimeMillis() + ".jpg");
+        imageFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo_" + System.currentTimeMillis() + ".jpg");
 
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(imageFile).build();
         imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                uploadPhotoToFirebase(imageFile);
+                if(cptDebut == 0){
+                    imageDebut = imageFile;
+                    cptDebut ++;
+                    try {
+                        inputImageDeb = InputImage.fromFilePath(getApplicationContext(), Uri.fromFile(imageDebut));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                envoie=false;
+                uploadPhotoToFirebase();
             }
 
             @Override
@@ -227,16 +256,24 @@ public class Quiz extends AppCompatActivity {
         });
     }
 
-    private void uploadPhotoToFirebase(File imageFile) {
+    private void uploadPhotoToFirebase() {
         StorageReference imageRef = storageRef.child("images/" + imageFile.getName());
 
         imageRef.putFile(Uri.fromFile(imageFile))
                 .addOnSuccessListener(taskSnapshot -> {
+                    Toast.makeText(getApplicationContext(), "tof", Toast.LENGTH_SHORT).show();
+                    envoie=true;
+                    try {
+                        detectAndCompareFaces(imageFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Failed to upload photo", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private void startAudioRecording() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -287,5 +324,65 @@ public class Quiz extends AppCompatActivity {
         if (audioFilePath != null) {
             uploadAudioToFirebase(audioFilePath);
         }
+    }
+
+    private void detectAndCompareFaces(File imageFile) throws IOException {
+        InputImage image1 = InputImage.fromFilePath(getApplicationContext(), Uri.fromFile(imageFile));
+        InputImage image2 = inputImageDeb;
+
+        Task<List<Face>> result1 = faceDetector.process(image1);
+        Task<List<Face>> result2 = faceDetector.process(image2);
+
+        Tasks.whenAllComplete(result1, result2)
+                .addOnSuccessListener(list -> {
+                    List<Face> faces1 = (List<Face>) list.get(0).getResult();
+                    List<Face> faces2 = (List<Face>) list.get(1).getResult();
+
+                    if (!faces1.isEmpty() && !faces2.isEmpty()) {
+                        if (!areFacesSimilar(faces1.get(0), faces2.get(0))) {
+                            Toast.makeText(getApplicationContext(), "Visage changé", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Visage identique", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Visage aucun", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
+    }
+
+    private boolean areFacesSimilar(Face face1, Face face2) {
+        PointF leftEye1 = getLandmarkPosition(face1, FaceLandmark.LEFT_EYE);
+        PointF rightEye1 = getLandmarkPosition(face1, FaceLandmark.RIGHT_EYE);
+        PointF noseBase1 = getLandmarkPosition(face1, FaceLandmark.NOSE_BASE);
+
+        PointF leftEye2 = getLandmarkPosition(face2, FaceLandmark.LEFT_EYE);
+        PointF rightEye2 = getLandmarkPosition(face2, FaceLandmark.RIGHT_EYE);
+        PointF noseBase2 = getLandmarkPosition(face2, FaceLandmark.NOSE_BASE);
+
+        if (leftEye1 != null && rightEye1 != null && noseBase1 != null &&
+                leftEye2 != null && rightEye2 != null && noseBase2 != null) {
+            double distanceBetweenEyes1 = Math.sqrt(Math.pow(leftEye1.x - rightEye1.x, 2) + Math.pow(leftEye1.y - rightEye1.y, 2));
+            double distanceBetweenEyes2 = Math.sqrt(Math.pow(leftEye2.x - rightEye2.x, 2) + Math.pow(leftEye2.y - rightEye2.y, 2));
+            double distanceBetweenNose1 = Math.abs(noseBase1.y - (leftEye1.y + rightEye1.y) / 2);
+            double distanceBetweenNose2 = Math.abs(noseBase2.y - (leftEye2.y + rightEye2.y) / 2);
+
+            double distanceThreshold = 50;
+
+            return Math.abs(distanceBetweenEyes1 - distanceBetweenEyes2) < distanceThreshold &&
+                    Math.abs(distanceBetweenNose1 - distanceBetweenNose2) < distanceThreshold;
+        } else {
+            return false;
+        }
+    }
+
+    private PointF getLandmarkPosition(Face face, int landmarkType) {
+        FaceLandmark landmark = face.getLandmark(landmarkType);
+        if (landmark != null) {
+            return landmark.getPosition();
+        }
+        return null;
     }
 }

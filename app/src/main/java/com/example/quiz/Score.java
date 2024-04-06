@@ -82,8 +82,15 @@ public class Score extends AppCompatActivity implements OnMapReadyCallback {
 
         Intent intent = getIntent();
         score = intent.getIntExtra("score", 0);
-        progressBar.setProgress((10 * score));
-        tvScore.setText((10 * score)+ " %");
+        if(score == -1){
+            score = 0;
+            progressBar.setProgress(0);
+            tvScore.setText("FRAUDE");
+        }else{
+            progressBar.setProgress((10 * score));
+            tvScore.setText((10 * score)+ " %");
+        }
+
 
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override

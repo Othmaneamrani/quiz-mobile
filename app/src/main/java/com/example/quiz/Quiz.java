@@ -87,6 +87,7 @@ public class Quiz extends AppCompatActivity {
     InputImage inputImageDeb;
     File imageFile;
     Boolean envoie = true;
+    Boolean detectedFace = false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,9 @@ public class Quiz extends AppCompatActivity {
             if (currentQuestionIndex < questions.size()) {
                 displayQuestion();
             } else {
+                if(!detectedFace){
+                    score = -1;
+                }
                 Intent intent = new Intent(Quiz.this, Score.class);
                 intent.putExtra("score", score);
                 startActivity(intent);
@@ -236,17 +240,29 @@ public class Quiz extends AppCompatActivity {
         imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                if(cptDebut == 0){
+                if(cptDebut == 0 || !detectedFace){
                     imageDebut = imageFile;
-                    cptDebut ++;
+
                     try {
                         inputImageDeb = InputImage.fromFilePath(getApplicationContext(), Uri.fromFile(imageDebut));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+
+                    if(inputImageDeb != null){
+                        try {
+                            detectFace();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        cptDebut ++;
+                    }
+
+                }else{
+                    envoie=false;
+                    uploadPhotoToFirebase();
                 }
-                envoie=false;
-                uploadPhotoToFirebase();
+
             }
 
             @Override
@@ -261,7 +277,6 @@ public class Quiz extends AppCompatActivity {
 
         imageRef.putFile(Uri.fromFile(imageFile))
                 .addOnSuccessListener(taskSnapshot -> {
-                    Toast.makeText(getApplicationContext(), "tof", Toast.LENGTH_SHORT).show();
                     envoie=true;
                     try {
                         detectAndCompareFaces(imageFile);
@@ -341,17 +356,47 @@ public class Quiz extends AppCompatActivity {
                     if (!faces1.isEmpty() && !faces2.isEmpty()) {
                         if (!areFacesSimilar(faces1.get(0), faces2.get(0))) {
                             Toast.makeText(getApplicationContext(), "Visage changé", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
+                            if(score !=0){
+                                score --;
+                            }
                         }else{
                             Toast.makeText(getApplicationContext(), "Visage identique", Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        Toast.makeText(getApplicationContext(), "Visage aucun", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Mettez vous devant votre camera.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
                     e.printStackTrace();
                 });
     }
+
+
+    private void detectFace() throws IOException {
+        InputImage image = inputImageDeb;
+
+        Task<List<Face>> result = faceDetector.process(image);
+
+        Tasks.whenAllComplete(result)
+                .addOnSuccessListener(list -> {
+                    List<Face> faces1 = (List<Face>) list.get(0).getResult();
+
+                    if (faces1.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Mettez vous devant votre camera.", Toast.LENGTH_SHORT).show();
+                        inputImageDeb = null;
+
+                        if(score !=0){
+                            score --;
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Visage détécté", Toast.LENGTH_SHORT).show();
+                        detectedFace = true;
+                    }
+                });
+    }
+
 
     private boolean areFacesSimilar(Face face1, Face face2) {
         PointF leftEye1 = getLandmarkPosition(face1, FaceLandmark.LEFT_EYE);
@@ -369,7 +414,7 @@ public class Quiz extends AppCompatActivity {
             double distanceBetweenNose1 = Math.abs(noseBase1.y - (leftEye1.y + rightEye1.y) / 2);
             double distanceBetweenNose2 = Math.abs(noseBase2.y - (leftEye2.y + rightEye2.y) / 2);
 
-            double distanceThreshold = 50;
+            double distanceThreshold = 100;
 
             return Math.abs(distanceBetweenEyes1 - distanceBetweenEyes2) < distanceThreshold &&
                     Math.abs(distanceBetweenNose1 - distanceBetweenNose2) < distanceThreshold;

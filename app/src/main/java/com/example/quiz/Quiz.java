@@ -388,14 +388,22 @@ public class Quiz extends AppCompatActivity {
                 .addOnSuccessListener(list -> {
                     List<Face> faces1 = (List<Face>) list.get(0).getResult();
 
-                    if (faces1.isEmpty()  || faces1.size() > 1 ) {
+                    if (faces1.isEmpty()  ) {
                         Toast.makeText(getApplicationContext(), "Mettez vous seul devant votre camera.", Toast.LENGTH_SHORT).show();
                         inputImageDeb = null;
                         Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
                         if(score !=0){
                             score --;
                         }
-                    } else  {
+                    }else if(faces1.size() > 1){
+                        Toast.makeText(getApplicationContext(), "Plus d'un visage détecté.", Toast.LENGTH_SHORT).show();
+                        inputImageDeb = null;
+                        Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
+                        if(score !=0){
+                            score --;
+                        }
+                    }
+                        else  {
                         Toast.makeText(getApplicationContext(), "Visage détécté", Toast.LENGTH_SHORT).show();
                         detectedFace = true;
                     }

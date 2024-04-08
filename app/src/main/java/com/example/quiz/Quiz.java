@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
-
 public class Quiz extends AppCompatActivity {
     private TextView questionTextView;
     private TextView questionNum;
@@ -87,7 +86,7 @@ public class Quiz extends AppCompatActivity {
     InputImage inputImageDeb;
     File imageFile;
     Boolean envoie = true;
-    Boolean detectedFace = false ;
+    Boolean detectedFace = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,7 +353,13 @@ public class Quiz extends AppCompatActivity {
                     List<Face> faces2 = (List<Face>) list.get(1).getResult();
 
                     if (!faces1.isEmpty() && !faces2.isEmpty()) {
-                        if (!areFacesSimilar(faces1.get(0), faces2.get(0))) {
+                        if (faces1.size() > 1) {
+                            Toast.makeText(getApplicationContext(), "Plus d'un visage détecté.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
+                            if(score !=0){
+                                score --;
+                            }
+                        }else if (!areFacesSimilar(faces1.get(0), faces2.get(0))) {
                             Toast.makeText(getApplicationContext(), "Visage changé", Toast.LENGTH_SHORT).show();
                             Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
                             if(score !=0){
@@ -383,14 +388,14 @@ public class Quiz extends AppCompatActivity {
                 .addOnSuccessListener(list -> {
                     List<Face> faces1 = (List<Face>) list.get(0).getResult();
 
-                    if (faces1.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Mettez vous devant votre camera.", Toast.LENGTH_SHORT).show();
+                    if (faces1.isEmpty()  || faces1.size() > 1 ) {
+                        Toast.makeText(getApplicationContext(), "Mettez vous seul devant votre camera.", Toast.LENGTH_SHORT).show();
                         inputImageDeb = null;
-
+                        Toast.makeText(getApplicationContext(), "Score -1", Toast.LENGTH_SHORT).show();
                         if(score !=0){
                             score --;
                         }
-                    } else {
+                    } else  {
                         Toast.makeText(getApplicationContext(), "Visage détécté", Toast.LENGTH_SHORT).show();
                         detectedFace = true;
                     }
@@ -414,7 +419,7 @@ public class Quiz extends AppCompatActivity {
             double distanceBetweenNose1 = Math.abs(noseBase1.y - (leftEye1.y + rightEye1.y) / 2);
             double distanceBetweenNose2 = Math.abs(noseBase2.y - (leftEye2.y + rightEye2.y) / 2);
 
-            double distanceThreshold = 100;
+            double distanceThreshold = 50;
 
             return Math.abs(distanceBetweenEyes1 - distanceBetweenEyes2) < distanceThreshold &&
                     Math.abs(distanceBetweenNose1 - distanceBetweenNose2) < distanceThreshold;
@@ -430,4 +435,9 @@ public class Quiz extends AppCompatActivity {
         }
         return null;
     }
+
+
+
+
+
 }

@@ -81,6 +81,7 @@ String userAuth;
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Depart.this, Quiz.class));
+                overridePendingTransition(R.anim.exit,R.anim.entry);
                 finish();
             }
         });

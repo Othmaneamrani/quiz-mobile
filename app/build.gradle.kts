@@ -71,9 +71,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation ("androidx.camera:camera-core:1.1.0")
-    implementation ("androidx.camera:camera-camera2:1.1.0")
-    implementation ("com.google.mlkit:face-detection:16.1.6")
+    implementation("androidx.camera:camera-core:1.1.0")
+    implementation("androidx.camera:camera-camera2:1.1.0")
+    implementation("com.google.mlkit:face-detection:16.1.6")
+
 }

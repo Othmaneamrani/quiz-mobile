@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/name"
-        android:drawableLeft="@drawable/baseline_name_24"
+        android:drawableLeft="@drawable/baseline_perm_identity_24"
         />
     <EditText
         android:layout_width="match_parent"

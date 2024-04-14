@@ -194,7 +194,7 @@ public class Quiz extends AppCompatActivity {
                     displayQuestion();
                     startCapturing();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Error in extracting data from firestore !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "EFirestore !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -284,7 +284,7 @@ public class Quiz extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(exception -> {
-                    Toast.makeText(getApplicationContext(), "Failed to upload photo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "FPhoto", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -318,7 +318,7 @@ public class Quiz extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Succeed to upload audio", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(exception -> {
-                    Toast.makeText(getApplicationContext(), "Failed to upload audio", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Faudio", Toast.LENGTH_SHORT).show();
                 });
     }
 

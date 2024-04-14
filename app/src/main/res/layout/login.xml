@@ -45,7 +45,9 @@
         android:text="@string/to_register"
         android:id="@+id/tvRegister"
         android:layout_gravity="center"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:textColor="@color/purple"
+        />
 
 
 </LinearLayout>

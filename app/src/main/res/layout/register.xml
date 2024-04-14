@@ -60,6 +60,7 @@
         android:text="@string/to_login"
         android:id="@+id/tvLogin"
         android:layout_gravity="center"
+        android:textColor="@color/purple"
         android:textSize="20dp"/>
 
 
